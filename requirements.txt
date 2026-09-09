@@ -1,0 +1,12 @@
+# Versions used by the verified reference training environment.
+torch==2.12.0
+lightning==2.6.5
+torchmetrics==0.11.4
+numpy==1.26.4
+scipy==1.14.1
+matplotlib==3.11.1
+einops==0.8.2
+PyYAML==6.0.3
+Unidecode==1.4.0
+inflect==7.5.0
+tensorboard==2.21.0
