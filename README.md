@@ -18,9 +18,9 @@ to MixerTTS and higher than FastSpeech 2—while using only 1.3% and 0.8% of the
 parameters, respectively.
 
 This repository contains the GrainTTS model, loss variants, training code, and
-reproducible configurations. Datasets, trained acoustic-model checkpoints,
-generated audio, virtual environments, and unrelated experiment artifacts are
-intentionally excluded.
+reproducible configurations. Datasets, generated audio, virtual environments,
+and unrelated experiment artifacts are intentionally excluded. The released
+acoustic-model checkpoint is included for direct inference.
 
 ## Demo
 
@@ -57,6 +57,32 @@ python scripts/check_setup.py
 `configure_data.sh` does not copy the dataset. It creates local symbolic links
 to the supplied LJSpeech root and verifies the preprocessed training files.
 
+## Inference
+
+The released GrainTTS acoustic-model checkpoint is included at
+`checkpoints/graintts_l1_ssim_gvar.ckpt`. It is an inference-only checkpoint:
+training progress, optimizer state, scheduler state, and callbacks are omitted.
+
+Its expected SHA-256 is:
+
+```text
+9361086fc8539d1ef6cdfbfd759608af42c258be3977c306515681b984ad3fb6
+```
+
+Synthesize English text on CPU (use `--device cuda` for GPU inference):
+
+```bash
+python graintts/infer.py \
+  --checkpoint checkpoints/graintts_l1_ssim_gvar.ckpt \
+  --text "Grain T T S is a compact text to speech model." \
+  --device cpu \
+  --output outputs/graintts.wav
+```
+
+The inference command uses `g2p-en` to convert ordinary English text to the
+ARPAbet symbols used during training. For exact control, replace `--text` with
+`--phonemes "G R EY1 N T IY1 T IY1 EH1 S"`.
+
 ## Training
 
 Train the primary GrainTTS configuration:
@@ -79,8 +105,9 @@ graintts/train_l1_ssim.py          # L1 + SSIM
 graintts/train_l1_ssim_gvar.py     # L1 + SSIM + GVar (GrainTTS)
 ```
 
-Training outputs are written under `checkpoints/`, `runs/`, and `val_outputs/`;
-all are ignored by Git.
+The primary training script writes checkpoints and TensorBoard logs under
+`lightning_logs/<run-name>/`; validation audio is written under `val_outputs/`.
+These outputs are ignored by Git.
 
 ## Included vocoder
 

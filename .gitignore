@@ -26,6 +26,8 @@ val_outputs/
 **/val_outputs/
 logs/
 **/logs/
+lightning_logs/
+**/lightning_logs/
 
 *.ckpt
 *.pt

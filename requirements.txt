@@ -9,4 +9,5 @@ einops==0.8.2
 PyYAML==6.0.3
 Unidecode==1.4.0
 inflect==7.5.0
+g2p-en==2.1.0
 tensorboard==2.21.0
