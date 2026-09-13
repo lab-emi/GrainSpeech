@@ -1,8 +1,10 @@
-"""Train the 11x5 SSIM + GVar model from random initialization."""
+"""Train or resume the 11x5 SSIM + GVar GrainTTS model."""
 
 import datetime
 import os
+from pathlib import Path
 
+import torch
 import yaml
 from lightning import Trainer
 from lightning.pytorch.callbacks import ModelCheckpoint
@@ -16,10 +18,10 @@ from utils.tools import get_args
 
 if __name__ == "__main__":
     args = get_args()
-    if args.checkpoint is not None:
-        raise ValueError("From-scratch training does not accept --checkpoint")
     if args.run_name is None:
         raise ValueError("--run-name is required")
+    if args.checkpoint is not None and not Path(args.checkpoint).is_file():
+        raise FileNotFoundError(f"Training checkpoint not found: {args.checkpoint}")
 
     if args.gpu_id is not None:
         os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu_id)
@@ -37,15 +39,6 @@ if __name__ == "__main__":
         lr=args.lr,
         weight_decay=args.weight_decay,
         max_epochs=args.max_epochs,
-        depth=args.depth,
-        n_blocks=args.n_blocks,
-        block_depth=args.block_depth,
-        reduction=args.reduction,
-        head=args.head,
-        embed_dim=args.embed_dim,
-        kernel_size=args.kernel_size,
-        decoder_kernel_size=args.decoder_kernel_size,
-        expansion=args.expansion,
         wav_path=args.out_folder,
         hifigan_checkpoint=args.hifigan_checkpoint,
         infer_device=args.infer_device,
@@ -62,7 +55,10 @@ if __name__ == "__main__":
         for name, parameter in model.named_parameters()
         if name.startswith("phoneme2mel.") and parameter.requires_grad
     )
-    print("Training from random initialization")
+    if args.checkpoint is None:
+        print("Training from random initialization")
+    else:
+        print(f"Resuming full training state from: {args.checkpoint}")
     print(f"  network file:       {networks_module.__file__}")
     print(f"  acoustic params:    {acoustic_params:,}")
     print(f"  SSIM kernel:        {tuple(model.ssim_loss_fn.kernel_size)}")
@@ -97,6 +93,10 @@ if __name__ == "__main__":
         callbacks=[checkpoint_callback],
     )
 
+    if args.compile:
+        print("Compiling model with torch.compile")
+        model = torch.compile(model)
+
     start_time = datetime.datetime.now()
-    trainer.fit(model, datamodule=datamodule)
+    trainer.fit(model, datamodule=datamodule, ckpt_path=args.checkpoint)
     print(f"Training time: {datetime.datetime.now() - start_time}")
