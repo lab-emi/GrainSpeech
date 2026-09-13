@@ -323,18 +323,13 @@ def get_args():
     parser.add_argument("--gpu-id", type=int, default=None,
                         help="Physical GPU index to run on (sets CUDA_VISIBLE_DEVICES), "
                              "e.g. --gpu-id 4 to use GPU 4.",)
-    parser.add_argument("--iter", type=int, default=1)
-    parser.add_argument("--threads", type=int, default=24)
-    
     #choices = ["bf16-mixed", "16-mixed", 16, 32, 64]
     parser.add_argument("--precision", default=16)
     
     parser.add_argument("--num_workers", type=int, default=24)
     parser.add_argument("--max_epochs", type=int, default=5000)
-    parser.add_argument("--warmup_epochs", type=int, default=50)
-
     parser.add_argument("--preprocess-config",
-                        default="config/LJSpeech/preprocess.yaml",
+                        default="configs/LJSpeech/preprocess.yaml",
                         type=str,
                         help="Path to preprocess.yaml",)
     parser.add_argument('--weight-decay',
@@ -354,47 +349,6 @@ def get_args():
                         metavar='N',
                         help='Batch size')
       
-    parser.add_argument('--depth',
-                        type=int,
-                        default=1,
-                        help='Encoder depth. Default for tiny, small & base.')
-    parser.add_argument('--block-depth',
-                        type=int,
-                        default=2,
-                        help='Decoder block depth. Default for tiny & small. Base:  3')
-    parser.add_argument('--n-blocks',
-                        type=int,
-                        default=2,
-                        help='Decoder blocks. Default for tiny. Small & base: 3.')
-    parser.add_argument('--reduction',
-                        type=int,
-                        default=4,
-                        help='Embed dim reduction factor. Default for tiny. Small: 2. Base: 1.')
-    parser.add_argument('--head',
-                        type=int,
-                        default=1,
-                        help='Number of transformer encoder head. Default for tiny & small. Base: 2.')
-    parser.add_argument('--embed-dim',
-                        type=int,
-                        default=128,
-                        help='Embedding or feature dim. To be reduced by --reduction.')
-    parser.add_argument('--base-dim',
-                        type=int,
-                        default=64,
-                        help='Encoder first-block output dim. Decoupled from embed_dim in V2 '
-                             '(e.g. embed_dim=80, base_dim=32). Default 32 = 128//4.')
-    parser.add_argument('--kernel-size',
-                        type=int,
-                        default=3,
-                        help='Conv1d kernel size (Encoder). Default for tiny & small. Base is 5.')
-    parser.add_argument('--decoder-kernel-size',
-                        type=int,
-                        default=5,
-                        help='Conv1d kernel size (Decoder). Default for tiny, small & base: 5.')
-    parser.add_argument('--expansion',
-                        type=int,
-                        default=1,
-                        help='MixFFN expansion. Default for tiny & small. Base: 2.')
     parser.add_argument('--out-folder',
                         default="val_outputs",
                         type=str,
@@ -402,7 +356,7 @@ def get_args():
 
 
     parser.add_argument("--hifigan-checkpoint",
-                        default="hifigan/LJ_V2/generator_v2",
+                        default="common/hifigan/LJ_V2/generator_v2",
                         type=str,
                         help="HiFiGAN checkpoint",)                      
 
@@ -426,61 +380,13 @@ def get_args():
     parser.add_argument("--checkpoint",
                         default=None,
                         type=str,
-                        help="Path to model checkpoint file",)
-    parser.add_argument("--wav-path",
-                        default="outputs",
-                        type=str,
-                        help="Folder to wav file to be generated during inference",)
-    parser.add_argument("--wav-filename",
-                        default="efficient_speech",
-                        type=str,
-                        help="wav filename to be generated",)
-    
-    parser.add_argument("--text",
-                        type=str,
-                        default=None,
-                        help="Raw text to synthesize, for single-sentence mode only",)
-
+                        help="Resume all training state from a Lightning checkpoint. "
+                             "The released inference-only checkpoint cannot be used.",)
     parser.add_argument('--verbose',
                         action='store_true',
                         help='Print out debug information')
-
-    parser.add_argument('--onnx',
-                        type=str,
-                        default=None,
-                        help='Convert to onnx model')
-    parser.add_argument('--onnx-insize',
-                        type=int,
-                        default=128,
-                        help='Max input size for the onnx model')
-    parser.add_argument('--onnx-opset',
-                        type=int,
-                        default=14,
-                        help='Opset version of onnx model (9<opset<15)')
-
-    parser.add_argument('--jit',
-                        type=str,
-                        default=None,
-                        help='Convert to jit model')
-    # use jit modules 
-    parser.add_argument('--to-torchscript',
-                        action='store_true',
-                        help='Convert model to torchscript')
-
-    # if benchmark is True 
-    parser.add_argument('--benchmark',
-                        action='store_true',
-                        help='Run benchmark')
      
     parser.add_argument('--compile',
                         action='store_true',
-                        help='Train using the compiled model')
-    parser.add_argument('--play',
-                        action='store_true',
-                        help='Playback the generated audio. Do not save it to disk.')
-    
-    args = parser.parse_known_args()[0]
-
-    args.num_workers *= args.devices
-
-    return args
+                        help='Compile the model with torch.compile before training')
+    return parser.parse_args()
