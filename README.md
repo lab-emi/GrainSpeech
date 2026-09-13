@@ -3,6 +3,9 @@
 **Authors:** Zitao Liang, Chang Gao\*  
 \* Corresponding author.
 
+This is the official repository for the paper **“GrainTTS: Less Context, More
+Detail for Compact Speech Synthesis.”**
+
 GrainTTS is a compact text-to-speech model that addresses two quality bottlenecks:
 encoder context allocation and Mel-spectrogram oversmoothing. A receptive-field
 study finds no consistent benefit from self-attention beyond 15 phonemes. Based
@@ -58,9 +61,10 @@ to the supplied LJSpeech root and verifies the preprocessed training files.
 
 ## Inference
 
-The released GrainTTS acoustic-model checkpoint is included at
-`checkpoints/graintts_l1_ssim_gvar.ckpt`. It is an inference-only checkpoint:
-training progress, optimizer state, scheduler state, and callbacks are omitted.
+The released checkpoint at `checkpoints/graintts_l1_ssim_gvar.ckpt` contains
+both the GrainTTS acoustic model and HiFi-GAN vocoder weights. It is an
+inference-only checkpoint: training progress, optimizer state, scheduler state,
+and callbacks are omitted.
 
 Synthesize English text on CPU (use `--device cuda` for GPU inference):
 
@@ -117,8 +121,16 @@ model.
 
 ## Included vocoder
 
-The HiFi-GAN v2 checkpoint required by the model is included at
-`common/hifigan/LJ_V2/generator_v2`.
+The released GrainTTS checkpoint already contains the HiFi-GAN v2 weights. The
+standalone `common/hifigan/LJ_V2/generator_v2` file is used when training from
+random initialization and by the current model-construction path.
+
+## Data preprocessing
+
+This repository currently expects an already preprocessed LJSpeech dataset. The
+scripts under `scripts/` map that dataset into the checkout and validate its
+layout; they do not generate Mel spectrograms, pitch, energy, duration, or
+phoneme alignments from the original LJSpeech audio and transcripts.
 
 ## Data layout
 
