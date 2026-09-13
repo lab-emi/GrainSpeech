@@ -2,7 +2,8 @@ dataset: "LJSpeech"
 
 path:
   corpus_path: "data/LJSpeech-1.1"
-  preprocessed_path: "preprocessed_data/LJSpeech"
+  raw_path: "data/LJSpeech-1.1/raw_data/LJSpeech"
+  preprocessed_path: "data/LJSpeech-1.1/preprocessed_data/LJSpeech"
 
 preprocessing:
   val_size: 512

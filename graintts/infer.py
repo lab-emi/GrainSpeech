@@ -16,7 +16,8 @@ from text.symbols import symbols
 
 DEFAULT_CHECKPOINT = "checkpoints/graintts_l1_ssim_gvar.ckpt"
 DEFAULT_CONFIG = "configs/LJSpeech/preprocess.yaml"
-DEFAULT_VOCODER = "common/hifigan/LJ_V2/generator_v2"
+DEFAULT_STATS = "configs/LJSpeech/stats.json"
+DEFAULT_VOCODER = "hifigan/LJ_V2/generator_v2"
 PAUSE_MARKS = {",", ";", ":", ".", "!", "?"}
 
 
@@ -30,6 +31,11 @@ def parse_args():
     )
     parser.add_argument("--checkpoint", default=DEFAULT_CHECKPOINT)
     parser.add_argument("--preprocess-config", default=DEFAULT_CONFIG)
+    parser.add_argument(
+        "--stats",
+        default=DEFAULT_STATS,
+        help="Training-set pitch and energy statistics",
+    )
     parser.add_argument("--hifigan-checkpoint", default=DEFAULT_VOCODER)
     parser.add_argument("--output", default="outputs/graintts.wav")
     parser.add_argument(
@@ -81,12 +87,14 @@ def main():
     device = resolve_device(args.device)
     checkpoint = Path(args.checkpoint)
     config_path = Path(args.preprocess_config)
+    stats_path = Path(args.stats)
     vocoder_checkpoint = Path(args.hifigan_checkpoint)
     output = Path(args.output)
 
     for path, label in (
         (checkpoint, "GrainTTS checkpoint"),
         (config_path, "preprocessing configuration"),
+        (stats_path, "LJSpeech statistics"),
         (vocoder_checkpoint, "HiFi-GAN checkpoint"),
     ):
         if not path.is_file():
@@ -94,6 +102,7 @@ def main():
 
     with config_path.open("r", encoding="utf-8") as stream:
         preprocess_config = yaml.safe_load(stream)
+    preprocess_config["path"]["preprocessed_path"] = str(stats_path.parent)
 
     phones = text_to_arpabet(args.text) if args.text else parse_phonemes(args.phonemes)
     arpabet = "{" + " ".join(phones) + "}"

@@ -1,7 +1,7 @@
-# Dataset mount point
+# Dataset directory
 
-Run `../scripts/configure_data.sh /absolute/path/to/LJSpeech-1.1` from anywhere
-inside the cloned repository. The dataset root must contain
-`preprocessed_data/LJSpeech`. The script creates local symbolic links without
-copying any dataset content. Dataset files are ignored by Git and must never be
-committed.
+Extract LJSpeech into `data/LJSpeech-1.1/`, then place the alignment files in
+`data/LJSpeech-1.1/TextGrid/LJSpeech/`. See the Training section of the main
+README for the complete preprocessing commands.
+
+All contents below `data/` except this file are ignored by Git.

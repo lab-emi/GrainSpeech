@@ -356,7 +356,7 @@ def get_args():
 
 
     parser.add_argument("--hifigan-checkpoint",
-                        default="common/hifigan/LJ_V2/generator_v2",
+                        default="hifigan/LJ_V2/generator_v2",
                         type=str,
                         help="HiFiGAN checkpoint",)                      
 

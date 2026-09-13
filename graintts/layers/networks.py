@@ -252,8 +252,7 @@ class FeatureUpsampler(nn.Module):
 class MelDecoder(nn.Module):
     """ Mel Spectrogram Decoder """
 
-    def __init__(self, dim, kernel_size=3, n_mel_channels=80,
-                 n_blocks=2, block_depth=2,):
+    def __init__(self):
         super().__init__()
 
         dim_mel=80
@@ -339,15 +338,7 @@ class MelDecoder(nn.Module):
 class PhonemeEncoder(nn.Module):
     """ Encodes phonemes to acoustic features """
 
-    def __init__(self,
-                 pitch_stats=None, 
-                 energy_stats=None, 
-                 depth=2, 
-                 reduction=4, 
-                 head=1, 
-                 embed_dim=128, 
-                 kernel_size=3, 
-                 expansion=1):
+    def __init__(self, pitch_stats=None, energy_stats=None):
         super().__init__()
 
         self.encoder = Encoder()

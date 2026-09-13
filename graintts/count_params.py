@@ -1,5 +1,5 @@
 """
-Per-operator parameter breakdown for EfficientSpeech (phoneme2mel only).
+Per-operator parameter breakdown for GrainTTS (phoneme2mel only).
 Lists every module that directly owns at least one learnable parameter,
 including activations with weights (DyT, etc.).
 
@@ -115,19 +115,10 @@ def main():
     # 1. EfficientSpeech (phoneme2mel only, trainable)
     # ------------------------------------------------------------------ #
     print(f"\nUsing networks file: {networks_file}")
-    print(f"Building EfficientSpeech  embed_dim={args.embed_dim} ...")
+    print("Building GrainTTS ...")
 
     es_model = EfficientSpeech(
         preprocess_config=DUMMY_PREPROCESS_CONFIG,
-        embed_dim=args.embed_dim,
-        depth=args.depth,
-        n_blocks=args.n_blocks,
-        block_depth=args.block_depth,
-        reduction=args.reduction,
-        head=args.head,
-        kernel_size=args.kernel_size,
-        decoder_kernel_size=args.decoder_kernel_size,
-        expansion=args.expansion,
         hifigan_checkpoint=args.hifigan_checkpoint,
         verbose=False,
     )
@@ -136,7 +127,7 @@ def main():
     es_rows  = collect_rows(es_root)
 
     bar = "=" * 72
-    print(f"\n{bar}\nEfficientSpeech  phoneme2mel  (PyTorch repr)\n{bar}\n")
+    print(f"\n{bar}\nGrainTTS  phoneme2mel  (PyTorch repr)\n{bar}\n")
     print(es_root)
     print()
 
@@ -145,14 +136,14 @@ def main():
     # ------------------------------------------------------------------ #
     grand_total = es_total
 
-    print_table("EfficientSpeech  [trainable]", es_rows, es_total, grand_total)
+    print_table("GrainTTS  [trainable]", es_rows, es_total, grand_total)
 
     # Summary
     w = 60
     print(f"\n{'='*w}")
     print(f"  TOTAL")
     print(f"{'='*w}")
-    print(f"  EfficientSpeech (trainable) : {es_total:>10,}  (100.0%)")
+    print(f"  GrainTTS (trainable) : {es_total:>10,}  (100.0%)")
     print(f"{'='*w}\n")
 
 

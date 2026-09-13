@@ -8,6 +8,13 @@ Apache 2.0 License
 
 import os
 import json
+import sys
+from pathlib import Path
+
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+if str(REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPOSITORY_ROOT))
+
 import hifigan
 import torch
 import torch.nn as nn
@@ -321,15 +328,6 @@ class EfficientSpeech(LightningModule):
                  lr=1e-3,
                  weight_decay=1e-6, 
                  max_epochs=5000,
-                 depth=1, 
-                 n_blocks=2, 
-                 block_depth=2, 
-                 reduction=4, 
-                 head=1,
-                 embed_dim=128, 
-                 kernel_size=3, 
-                 decoder_kernel_size=3, 
-                 expansion=1,
                  wav_path="wavs",
                  hifigan_checkpoint="hifigan/LJ_V2/generator_v2",
                  infer_device=None,
@@ -358,19 +356,12 @@ class EfficientSpeech(LightningModule):
             pitch_stats = stats["pitch"][:2]
             energy_stats = stats["energy"][:2]
 
-        phoneme_encoder = PhonemeEncoder(pitch_stats=pitch_stats,
-                                         energy_stats=energy_stats,
-                                         depth=depth,
-                                         reduction=reduction,
-                                         head=head,
-                                         embed_dim=embed_dim,
-                                         kernel_size=kernel_size,
-                                         expansion=expansion)
+        phoneme_encoder = PhonemeEncoder(
+            pitch_stats=pitch_stats,
+            energy_stats=energy_stats,
+        )
 
-        mel_decoder = MelDecoder(dim=embed_dim//reduction, 
-                                 kernel_size=decoder_kernel_size,
-                                 n_blocks=n_blocks, 
-                                 block_depth=block_depth)
+        mel_decoder = MelDecoder()
 
         self.phoneme2mel = Phoneme2Mel(encoder=phoneme_encoder,
                                        decoder=mel_decoder)

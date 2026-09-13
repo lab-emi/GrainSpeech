@@ -14,8 +14,6 @@ import torch
 import datetime
 from datamodule import LJSpeechDataModule
 from lightning import Trainer
-from lightning.pytorch.strategies import DDPStrategy
-
 from utils.tools import get_args
 from model import EfficientSpeech
 
@@ -36,8 +34,6 @@ if __name__ == "__main__":
     preprocess_config = yaml.load(
         open(args.preprocess_config, "r"), Loader=yaml.FullLoader)
     
-    args.num_workers *= args.devices 
-
     datamodule = LJSpeechDataModule(preprocess_config=preprocess_config,
                                     batch_size=args.batch_size,
                                     num_workers=args.num_workers)
@@ -46,15 +42,6 @@ if __name__ == "__main__":
                             lr=args.lr,
                             weight_decay=args.weight_decay,
                             max_epochs=args.max_epochs,
-                            depth=args.depth, 
-                            n_blocks=args.n_blocks, 
-                            block_depth=args.block_depth,
-                            reduction=args.reduction, 
-                            head=args.head,
-                            embed_dim=args.embed_dim, 
-                            kernel_size=args.kernel_size,
-                            decoder_kernel_size=args.decoder_kernel_size,
-                            expansion=args.expansion, 
                             wav_path=args.out_folder,
                             hifigan_checkpoint=args.hifigan_checkpoint,
                             infer_device=args.infer_device, 
