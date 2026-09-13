@@ -32,7 +32,6 @@ Audio samples are available at:
 - `graintts`: GrainTTS architecture and loss variants.
 - `common`: the HiFi-GAN v2 vocoder required by the model.
 - `configs`: portable LJSpeech preprocessing configuration.
-- `hparams`: exact experiment hyperparameters.
 - `scripts`: dataset mapping and setup validation.
 
 ## Quick start
@@ -62,12 +61,6 @@ to the supplied LJSpeech root and verifies the preprocessed training files.
 The released GrainTTS acoustic-model checkpoint is included at
 `checkpoints/graintts_l1_ssim_gvar.ckpt`. It is an inference-only checkpoint:
 training progress, optimizer state, scheduler state, and callbacks are omitted.
-
-Its expected SHA-256 is:
-
-```text
-9361086fc8539d1ef6cdfbfd759608af42c258be3977c306515681b984ad3fb6
-```
 
 Synthesize English text on CPU (use `--device cuda` for GPU inference):
 
@@ -109,14 +102,23 @@ The primary training script writes checkpoints and TensorBoard logs under
 `lightning_logs/<run-name>/`; validation audio is written under `val_outputs/`.
 These outputs are ignored by Git.
 
+Resume a stopped training run from a full Lightning checkpoint (for example,
+the automatically written `last.ckpt`) by adding:
+
+```bash
+--checkpoint lightning_logs/<run-name>/checkpoints/last.ckpt
+```
+
+This restores the model, optimizer, learning-rate scheduler, epoch, and global
+step. The released checkpoint under `checkpoints/` is intentionally
+inference-only and cannot resume training. Add `--compile` to enable
+`torch.compile`; its first training steps take longer while PyTorch compiles the
+model.
+
 ## Included vocoder
 
-The HiFi-GAN v2 checkpoint required by the model is included in this repository.
-Its expected SHA-256 is:
-
-```text
-3fac378c5918fb2c102733f21eeaa8e9a4ca6cda24dbfddc55bbb947c78d562f
-```
+The HiFi-GAN v2 checkpoint required by the model is included at
+`common/hifigan/LJ_V2/generator_v2`.
 
 ## Data layout
 
