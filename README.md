@@ -25,7 +25,7 @@ acoustic-model checkpoint is included for direct inference.
 ## Demo
 
 Audio samples are available at:
-[**GrainTTS Audio Demo**](https://zitaoliang.github.io/speech-audio-demo/)
+[**GrainTTS Audio Demo**](https://lab-emi.github.io/GrainTTS-Audio-Demo/)
 
 ## Repository contents
 
