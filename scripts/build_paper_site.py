@@ -65,13 +65,13 @@ def demo_html(manifest):
                 for model in manifest["models"]
                 if model["group"] == group and model["model_id"] != MAIN_MODEL
             )
-            groups.append(f'<div class="model-group"><h4>{title}</h4><div class="model-grid">{cards}</div></div>')
+            groups.append(f'<div class="model-group"><h3>{title}</h3><div class="model-grid">{cards}</div></div>')
         hidden = " hidden" if index else ""
         panels.append(f'''<section id="{panel_id}" class="sample-panel" aria-labelledby="sentence-{number}"{hidden}>
           <div class="transcript-label"><span id="sentence-{number}">SENTENCE {number:02}</span><span>{escape(sample['sample_id'])}</span></div>
           <p class="transcript">“{escape(sample['text'])}”</p>
           <div class="featured-comparison">{primary}{reference}</div>
-          <details class="comparisons"><summary>Compare all models <span>12 acoustic variants · one shared sentence</span></summary>{''.join(groups)}</details>
+          <details class="comparisons" open><summary>Compare all models <span>12 acoustic variants · one shared sentence</span></summary>{''.join(groups)}</details>
         </section>''')
     return "\n".join(buttons), "\n".join(panels)
 

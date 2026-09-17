@@ -34,9 +34,9 @@ synthesis. It introduces two changes:
 
 Choose a sentence and press play on the
 [**GrainSpeech paper website**](https://lab-emi.github.io/GrainSpeech/).
-Listen to GrainSpeech alongside the original recording, then expand **Compare
-all models** to hear the other systems. Five LJSpeech sentences and 12
-acoustic-model variants are available, with all playback on the same page.
+Listen to GrainSpeech alongside the original recording, then explore the expanded
+**Compare all models** section to hear the other systems. Five LJSpeech sentences
+and 12 acoustic-model variants are available, with all playback on the same page.
 
 All 65 comparison WAV files and their provenance live in this repository,
 together with the model, code and paper website. To edit or preview the website,

@@ -31,6 +31,8 @@ Relative asset paths support both local preview and the GitHub Pages project URL
 - Players load audio on demand. Choosing a sentence pauses hidden players;
   starting a recording pauses any other recording. The complete comparison
   works without JavaScript, with all five sentences shown.
+- Model comparisons are expanded by default. Visitors can collapse them, and
+  their choice is preserved when switching sentences.
 - The EMI logo is the original SVG from the
   [EMI website repository](https://github.com/lab-emi/website-emi/blob/main/public/images/emi-logo.svg).
 - The TU Delft logo is the original SVG served by the
