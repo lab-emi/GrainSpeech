@@ -202,6 +202,16 @@ h1 > span:first-child {
   letter-spacing: -0.035em;
   margin-top: 14px;
 }
+.hero-intro {
+  max-width: 36rem;
+  margin-top: 18px;
+  color: var(--ink);
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+.hero-intro strong {
+  font-weight: 750;
+}
 .authors {
   font-size: 1rem;
   font-weight: 650;
