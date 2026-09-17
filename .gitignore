@@ -14,7 +14,7 @@ data/*
 !data/README.md
 preprocessed_data
 raw_data
-graintts/preprocessed_data
+grainspeech/preprocessed_data
 
 checkpoints/
 **/checkpoints/

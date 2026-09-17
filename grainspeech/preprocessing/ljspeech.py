@@ -137,7 +137,7 @@ class LJSpeechPreprocessor:
         pitch_scaler = StandardScaler()
         energy_scaler = StandardScaler()
         frame_count = 0
-        for wav_path in tqdm(wav_files, desc="Extracting GrainTTS features"):
+        for wav_path in tqdm(wav_files, desc="Extracting GrainSpeech features"):
             result = self.process_utterance(wav_path.stem)
             if result is None:
                 continue

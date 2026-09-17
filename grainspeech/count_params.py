@@ -1,5 +1,5 @@
 """
-Per-operator parameter breakdown for GrainTTS (phoneme2mel only).
+Per-operator parameter breakdown for GrainSpeech (phoneme2mel only).
 Lists every module that directly owns at least one learnable parameter,
 including activations with weights (DyT, etc.).
 
@@ -97,7 +97,7 @@ def main():
     parser.add_argument(
         "--networks-file",
         default="layers/networks.py",
-        help="Path to a networks file, relative to graintts/ or absolute.",
+        help="Path to a networks file, relative to grainspeech/ or absolute.",
     )
     known, remaining = parser.parse_known_args()
     sys.argv = [sys.argv[0], *remaining]
@@ -107,17 +107,17 @@ def main():
         raise FileNotFoundError(f"networks file not found: {networks_file}")
 
     _load_networks_module(networks_file)
-    from model import EfficientSpeech
+    from model import GrainSpeech
 
     args = get_args()
 
     # ------------------------------------------------------------------ #
-    # 1. EfficientSpeech (phoneme2mel only, trainable)
+    # 1. GrainSpeech (phoneme2mel only, trainable)
     # ------------------------------------------------------------------ #
     print(f"\nUsing networks file: {networks_file}")
-    print("Building GrainTTS ...")
+    print("Building GrainSpeech ...")
 
-    es_model = EfficientSpeech(
+    es_model = GrainSpeech(
         preprocess_config=DUMMY_PREPROCESS_CONFIG,
         hifigan_checkpoint=args.hifigan_checkpoint,
         verbose=False,
@@ -127,7 +127,7 @@ def main():
     es_rows  = collect_rows(es_root)
 
     bar = "=" * 72
-    print(f"\n{bar}\nGrainTTS  phoneme2mel  (PyTorch repr)\n{bar}\n")
+    print(f"\n{bar}\nGrainSpeech  phoneme2mel  (PyTorch repr)\n{bar}\n")
     print(es_root)
     print()
 
@@ -136,14 +136,14 @@ def main():
     # ------------------------------------------------------------------ #
     grand_total = es_total
 
-    print_table("GrainTTS  [trainable]", es_rows, es_total, grand_total)
+    print_table("GrainSpeech  [trainable]", es_rows, es_total, grand_total)
 
     # Summary
     w = 60
     print(f"\n{'='*w}")
     print(f"  TOTAL")
     print(f"{'='*w}")
-    print(f"  GrainTTS (trainable) : {es_total:>10,}  (100.0%)")
+    print(f"  GrainSpeech (trainable) : {es_total:>10,}  (100.0%)")
     print(f"{'='*w}\n")
 
 

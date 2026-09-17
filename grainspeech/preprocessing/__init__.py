@@ -1,4 +1,4 @@
-"""LJSpeech preprocessing used by GrainTTS."""
+"""LJSpeech preprocessing used by GrainSpeech."""
 
 from .ljspeech import LJSpeechPreprocessor, prepare_raw_ljspeech
 

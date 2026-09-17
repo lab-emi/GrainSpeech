@@ -15,7 +15,7 @@ import datetime
 from datamodule import LJSpeechDataModule
 from lightning import Trainer
 from utils.tools import get_args
-from model import EfficientSpeech
+from model import GrainSpeech
 
 
 def print_args(args):
@@ -38,7 +38,7 @@ if __name__ == "__main__":
                                     batch_size=args.batch_size,
                                     num_workers=args.num_workers)
 
-    model = EfficientSpeech(preprocess_config=preprocess_config, 
+    model = GrainSpeech(preprocess_config=preprocess_config,
                             lr=args.lr,
                             weight_decay=args.weight_decay,
                             max_epochs=args.max_epochs,

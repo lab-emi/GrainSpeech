@@ -108,7 +108,7 @@ def get_lr_scheduler(optimizer, warmup_steps, total_steps, min_lr=0):
     return scheduler
 
 
-class EfficientSpeech(LightningModule):
+class GrainSpeech(LightningModule):
     def __init__(self,
                  preprocess_config, 
                  lr=1e-3,
@@ -118,7 +118,7 @@ class EfficientSpeech(LightningModule):
                  hifigan_checkpoint="hifigan/LJ_V2/generator_v2",
                  infer_device=None, 
                  verbose=False):
-        super(EfficientSpeech, self).__init__()
+        super().__init__()
 
         self.save_hyperparameters()
 
@@ -273,3 +273,7 @@ class EfficientSpeech(LightningModule):
         self.scheduler = get_lr_scheduler(optimizer, 50, self.hparams.max_epochs, min_lr=0)
     
         return [optimizer], [self.scheduler]
+
+
+# Backward-compatible import name for code built against the pre-release name.
+EfficientSpeech = GrainSpeech

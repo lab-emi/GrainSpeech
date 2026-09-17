@@ -216,113 +216,7 @@ class MaskedSSIMLoss(nn.Module):
         return loss_map.sum() / mask.sum().clamp_min(1.0)
 
 
-class GradientVarianceLoss(nn.Module):
-    """Match local variances of first-order time/frequency Mel gradients."""
-
-    def __init__(
-        self,
-        kernel_size=(11, 5),
-        eps=1e-6,
-        use_log=True,
-        include_time=True,
-        include_freq=True,
-    ):
-        super().__init__()
-        if any(size % 2 == 0 for size in kernel_size):
-            raise ValueError("GVar kernel dimensions must be odd.")
-        if any(size <= 0 for size in kernel_size):
-            raise ValueError("GVar kernel dimensions must be positive.")
-        self.kernel_size = tuple(int(size) for size in kernel_size)
-        self.eps = eps
-        self.use_log = use_log
-        self.include_time = include_time
-        self.include_freq = include_freq
-
-    def _masked_local_var(self, value, mask):
-        kt, kf = self.kernel_size
-        padding = (kt // 2, kf // 2)
-        mask = mask.to(dtype=value.dtype)
-        denominator = F.avg_pool2d(
-            mask,
-            kernel_size=self.kernel_size,
-            stride=1,
-            padding=padding,
-            count_include_pad=False,
-        ).clamp_min(self.eps)
-        mean = F.avg_pool2d(
-            value * mask,
-            kernel_size=self.kernel_size,
-            stride=1,
-            padding=padding,
-            count_include_pad=False,
-        ) / denominator
-        mean_square = F.avg_pool2d(
-            value.square() * mask,
-            kernel_size=self.kernel_size,
-            stride=1,
-            padding=padding,
-            count_include_pad=False,
-        ) / denominator
-        return (mean_square - mean.square()).clamp_min(self.eps)
-
-    @staticmethod
-    def _masked_l1(pred, target, mask):
-        mask = mask.to(dtype=pred.dtype)
-        difference = torch.abs(pred - target) * mask
-        return difference.sum() / mask.sum().clamp_min(1.0)
-
-    def forward(self, pred_mel, target_mel, valid_mask=None):
-        if pred_mel.shape != target_mel.shape:
-            raise ValueError("pred_mel and target_mel must have the same shape.")
-
-        batch, time, freq = pred_mel.shape
-        # Keep local variance calculations in FP32 under mixed precision.
-        pred = pred_mel.unsqueeze(1).float()
-        target = target_mel.unsqueeze(1).float()
-
-        if valid_mask is None:
-            mask = torch.ones_like(pred)
-        elif valid_mask.dim() == 2:
-            mask = valid_mask[:, None, :, None].expand(batch, 1, time, freq)
-        elif valid_mask.dim() == 3:
-            mask = valid_mask[:, None, :, :]
-        else:
-            raise ValueError("valid_mask must be [B,T] or [B,T,F].")
-        mask = mask.to(device=pred.device, dtype=pred.dtype)
-
-        losses = []
-        if self.include_time:
-            pred_dt = pred[:, :, 1:, :] - pred[:, :, :-1, :]
-            target_dt = target[:, :, 1:, :] - target[:, :, :-1, :]
-            mask_dt = mask[:, :, 1:, :] * mask[:, :, :-1, :]
-            pred_var_t = self._masked_local_var(pred_dt, mask_dt)
-            target_var_t = self._masked_local_var(target_dt, mask_dt)
-            if self.use_log:
-                pred_var_t = torch.log(pred_var_t + self.eps)
-                target_var_t = torch.log(target_var_t + self.eps)
-            losses.append(
-                self._masked_l1(pred_var_t, target_var_t.detach(), mask_dt)
-            )
-
-        if self.include_freq:
-            pred_df = pred[:, :, :, 1:] - pred[:, :, :, :-1]
-            target_df = target[:, :, :, 1:] - target[:, :, :, :-1]
-            mask_df = mask[:, :, :, 1:] * mask[:, :, :, :-1]
-            pred_var_f = self._masked_local_var(pred_df, mask_df)
-            target_var_f = self._masked_local_var(target_df, mask_df)
-            if self.use_log:
-                pred_var_f = torch.log(pred_var_f + self.eps)
-                target_var_f = torch.log(target_var_f + self.eps)
-            losses.append(
-                self._masked_l1(pred_var_f, target_var_f.detach(), mask_df)
-            )
-
-        if not losses:
-            return pred.new_tensor(0.0)
-        return torch.stack(losses).mean()
-
-
-class EfficientSpeech(LightningModule):
+class GrainSpeech(LightningModule):
     def __init__(self,
                  preprocess_config, 
                  lr=1e-3,
@@ -342,11 +236,10 @@ class EfficientSpeech(LightningModule):
                  mel_weight=5.0,
                  l1_weight=1.0,
                  ssim_weight=1.0,
-                 gvar_weight=0.5,
                  pitch_weight=2.0,
                  energy_weight=2.0,
                  duration_weight=1.0):
-        super(EfficientSpeech, self).__init__()
+        super().__init__()
 
         self.save_hyperparameters()
 
@@ -375,20 +268,13 @@ class EfficientSpeech(LightningModule):
             k1=ssim_k1,
             k2=ssim_k2,
         )
-        self.gvar_loss_fn = GradientVarianceLoss(
-            kernel_size=(ssim_kernel_time, ssim_kernel_freq),
-            use_log=True,
-            include_time=True,
-            include_freq=True,
-        )
         self.mel_weight = float(mel_weight)
         self.l1_weight = float(l1_weight)
         self.ssim_weight = float(ssim_weight)
-        self.gvar_weight = float(gvar_weight)
         self.pitch_weight = float(pitch_weight)
         self.energy_weight = float(energy_weight)
         self.duration_weight = float(duration_weight)
-        self.hparams["mel_objective"] = "1.0_l1_plus_1.0_ssim_plus_0.5_gvar"
+        self.hparams["mel_objective"] = "1.0_l1_plus_1.0_ssim"
 
         self.training_step_outputs = []
 
@@ -430,15 +316,9 @@ class EfficientSpeech(LightningModule):
             target_mel=mel,
             valid_mask=valid_mel_mask,
         )
-        gvar_loss = self.gvar_loss_fn(
-            pred_mel=mel_pred,
-            target_mel=mel,
-            valid_mask=valid_mel_mask,
-        )
         mel_loss = (
             self.l1_weight * mel_l1_loss
             + self.ssim_weight * ssim_loss
-            + self.gvar_weight * gvar_loss
         )
 
         phoneme_mask = ~phoneme_mask
@@ -467,7 +347,6 @@ class EfficientSpeech(LightningModule):
             mel_loss,
             mel_l1_loss,
             ssim_loss,
-            gvar_loss,
             pitch_loss,
             energy_loss,
             duration_loss,
@@ -482,7 +361,6 @@ class EfficientSpeech(LightningModule):
             mel_loss,
             mel_l1_loss,
             ssim_loss,
-            gvar_loss,
             pitch_loss,
             energy_loss,
             duration_loss,
@@ -499,7 +377,6 @@ class EfficientSpeech(LightningModule):
                   "mel_loss": mel_loss,
                   "mel_l1_loss": mel_l1_loss,
                   "ssim_loss": ssim_loss,
-                  "gvar_loss": gvar_loss,
                   "pitch_loss": pitch_loss,
                   "energy_loss": energy_loss, 
                   "duration_loss": duration_loss}
@@ -515,7 +392,6 @@ class EfficientSpeech(LightningModule):
             [x["mel_l1_loss"] for x in self.training_step_outputs]
         ).mean()
         avg_ssim_loss = torch.stack([x["ssim_loss"] for x in self.training_step_outputs]).mean()
-        avg_gvar_loss = torch.stack([x["gvar_loss"] for x in self.training_step_outputs]).mean()
         avg_pitch_loss = torch.stack([x["pitch_loss"] for x in self.training_step_outputs]).mean()
         avg_energy_loss = torch.stack(
             [x["energy_loss"] for x in self.training_step_outputs]).mean()
@@ -524,7 +400,6 @@ class EfficientSpeech(LightningModule):
         self.log("mel", avg_mel_loss, on_epoch=True, prog_bar=True, sync_dist=True)
         self.log("l1", avg_mel_l1_loss, on_epoch=True, prog_bar=True, sync_dist=True)
         self.log("ssim", avg_ssim_loss, on_epoch=True, prog_bar=True, sync_dist=True)
-        self.log("gvar", avg_gvar_loss, on_epoch=True, prog_bar=True, sync_dist=True)
         self.log("pitch", avg_pitch_loss, on_epoch=True, prog_bar=True, sync_dist=True)
         self.log("energy", avg_energy_loss, on_epoch=True, prog_bar=True, sync_dist=True)
         self.log("dur", avg_duration_loss, on_epoch=True, prog_bar=True, sync_dist=True)
@@ -540,7 +415,6 @@ class EfficientSpeech(LightningModule):
             mel_loss,
             mel_l1_loss,
             ssim_loss,
-            gvar_loss,
             pitch_loss,
             energy_loss,
             duration_loss,
@@ -557,7 +431,6 @@ class EfficientSpeech(LightningModule):
                 "val_mel": mel_loss,
                 "val_l1": mel_l1_loss,
                 "val_ssim": ssim_loss,
-                "val_gvar": gvar_loss,
                 "val_pitch": pitch_loss,
                 "val_energy": energy_loss,
                 "val_duration": duration_loss,
@@ -607,3 +480,7 @@ class EfficientSpeech(LightningModule):
             self.scheduler = get_lr_scheduler(optimizer, 50, self.hparams.max_epochs, min_lr=0)
 
         return [optimizer], [self.scheduler]
+
+
+# Backward-compatible import name for code built against the pre-release name.
+EfficientSpeech = GrainSpeech

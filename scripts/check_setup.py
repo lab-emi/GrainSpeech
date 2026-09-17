@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the portable GrainTTS checkout without starting a training run."""
+"""Validate the portable GrainSpeech checkout without starting a training run."""
 
 from __future__ import annotations
 
@@ -52,7 +52,7 @@ if "pitch" not in stats or "energy" not in stats:
 
 require(ROOT / "hifigan/LJ_V2/generator_v2")
 
-print("GrainTTS setup is ready.")
+print("GrainSpeech setup is ready.")
 print(f"  Python/PyTorch: {torch.__version__}")
 print(f"  CUDA available: {torch.cuda.is_available()}")
 print(f"  Dataset:        {(ROOT / 'data/LJSpeech-1.1').resolve()}")

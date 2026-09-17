@@ -1,4 +1,4 @@
-"""Prepare LJSpeech features for GrainTTS training."""
+"""Prepare LJSpeech features for GrainSpeech training."""
 
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--preprocess-config",
         default="configs/LJSpeech/preprocess.yaml",
-        help="Path to the GrainTTS preprocessing configuration",
+        help="Path to the GrainSpeech preprocessing configuration",
     )
     parser.add_argument(
         "--textgrid-dir",

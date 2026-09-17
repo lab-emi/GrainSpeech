@@ -1,43 +1,44 @@
-# GrainTTS
+# GrainSpeech
 
 **Authors:** Zitao Liang, Chang Gao\*  
 \* Corresponding author.
 
-This is the official repository for the paper **“GrainTTS: Less Context, More
-Detail for Compact Speech Synthesis.”** GrainTTS introduces two changes for
-compact text-to-speech synthesis:
+This is the official repository for the paper
+[**“GrainSpeech: Less Context, More Detail for Compact Speech Synthesis”**](https://arxiv.org/abs/2609.18856).
+GrainSpeech introduces two changes for compact text-to-speech synthesis:
 
 1. A **fixed-receptive-field convolutional encoder** that uses focused phoneme
    context for acoustic prediction.
 2. An **anti-oversmoothing Mel loss** that combines L1, SSIM, and local
    gradient-variance (GVar) supervision.
 
-![GrainTTS architecture](assets/graintts_architecture.png)
+![GrainSpeech architecture](assets/grainspeech_architecture.png)
 
-[GrainTTS Audio Demo](#graintts-audio-demo) ·
-[GrainTTS Online Playground](#graintts-online-playground) ·
-[GrainTTS Quick Start](#graintts-quick-start) ·
-[GrainTTS Training](#graintts-training)
+[Paper](https://arxiv.org/abs/2609.18856) ·
+[GrainSpeech Audio Demo](#grainspeech-audio-demo) ·
+[GrainSpeech Online Playground](#grainspeech-online-playground) ·
+[GrainSpeech Quick Start](#grainspeech-quick-start) ·
+[GrainSpeech Training](#grainspeech-training)
 
-## GrainTTS Audio Demo
+## GrainSpeech Audio Demo
 
-Listen to GrainTTS samples generated from the LJSpeech dataset:
-[**GrainTTS Audio Demo**](https://lab-emi.github.io/GrainTTS-Audio-Demo/).
+Listen to GrainSpeech samples generated from the LJSpeech dataset:
+[**GrainSpeech Audio Demo**](https://lab-emi.github.io/GrainTTS-Audio-Demo/).
 
-## GrainTTS Online Playground
+## GrainSpeech Online Playground
 
-[**Launch the GrainTTS Online Playground**](TODO) — coming soon. The playground
+[**Launch the GrainSpeech Online Playground**](TODO) — coming soon. The playground
 will provide real-time text-to-speech synthesis directly from a web page.
 
-## GrainTTS Quick Start
+## GrainSpeech Quick Start
 
 The reference environment uses Python 3.11, PyTorch 2.12, and Lightning 2.6.
 The complete package snapshot is available in
 `environment/reference-pip-freeze.txt`.
 
 ```bash
-git clone https://github.com/lab-emi/GrainTTS.git
-cd GrainTTS
+git clone https://github.com/lab-emi/GrainSpeech.git
+cd GrainSpeech
 
 python3.11 -m venv .venv
 . .venv/bin/activate
@@ -53,34 +54,34 @@ environment. Inference with `--phonemes` does not use this conversion step.
 Synthesize English text with the released checkpoint:
 
 ```bash
-python graintts/infer.py \
-  --checkpoint checkpoints/graintts_l1_ssim_gvar.ckpt \
-  --text "Grain T T S is a compact text to speech model." \
+python grainspeech/infer.py \
+  --checkpoint checkpoints/grainspeech_l1_ssim_gvar.ckpt \
+  --text "Grain Speech is a compact text to speech model." \
   --device cpu \
-  --output outputs/graintts.wav
+  --output outputs/grainspeech.wav
 ```
 
 Use `--device cuda` for GPU inference. To control the pronunciation directly,
 replace `--text` with a space-separated ARPAbet sequence, for example:
 
 ```bash
-python graintts/infer.py \
-  --checkpoint checkpoints/graintts_l1_ssim_gvar.ckpt \
-  --phonemes "G R EY1 N T IY1 T IY1 EH1 S" \
+python grainspeech/infer.py \
+  --checkpoint checkpoints/grainspeech_l1_ssim_gvar.ckpt \
+  --phonemes "G R EY1 N S P IY1 CH" \
   --device cpu \
-  --output outputs/graintts.wav
+  --output outputs/grainspeech.wav
 ```
 
-The released inference checkpoint contains the trained GrainTTS acoustic model
+The released inference checkpoint contains the trained GrainSpeech acoustic model
 and HiFi-GAN vocoder weights. The small `configs/LJSpeech/stats.json` file lets
 inference run without downloading the training dataset. The standalone HiFi-GAN
 file under `hifigan/LJ_V2/` is also kept because the current model
 constructor uses it while loading the checkpoint and when starting a new
 training run.
 
-## GrainTTS Training
+## GrainSpeech Training
 
-Want to modify GrainTTS or train your own variant? Complete the Quick Start
+Want to modify GrainSpeech or train your own variant? Complete the Quick Start
 installation first, then prepare LJSpeech as follows.
 
 ### 1. Download LJSpeech
@@ -89,7 +90,7 @@ Download [LJSpeech 1.1](https://keithito.com/LJ-Speech-Dataset/) and extract it
 directly under the repository's `data/` directory. The final location must be:
 
 ```text
-GrainTTS/
+GrainSpeech/
 └── data/
     └── LJSpeech-1.1/
         ├── metadata.csv
@@ -106,14 +107,14 @@ Download the precomputed
 Place the downloaded `.TextGrid` files at:
 
 ```text
-GrainTTS/data/LJSpeech-1.1/TextGrid/LJSpeech/
+GrainSpeech/data/LJSpeech-1.1/TextGrid/LJSpeech/
 ```
 
 The `.TextGrid` files should be directly inside the final `LJSpeech/` folder,
 not inside an additional nested directory.
 
 A TextGrid records the time interval occupied by each phoneme in an utterance.
-GrainTTS uses these phoneme-to-audio alignments to obtain duration targets and
+GrainSpeech uses these phoneme-to-audio alignments to obtain duration targets and
 to align pitch, energy, and Mel-spectrogram features with the phoneme sequence.
 
 We thank the [EfficientSpeech](https://github.com/roatienza/efficientspeech)
@@ -126,7 +127,7 @@ pipeline.
 Run the preprocessing command from the repository root:
 
 ```bash
-python graintts/preprocess.py \
+python grainspeech/preprocess.py \
   --preprocess-config configs/LJSpeech/preprocess.yaml \
   --textgrid-dir data/LJSpeech-1.1/TextGrid \
   --device auto
@@ -167,13 +168,13 @@ training. Once preprocessing finishes, validate the data layout:
 python scripts/check_setup.py
 ```
 
-### 4. Train GrainTTS
+### 4. Train GrainSpeech
 
 Train the paper model with L1, SSIM, and GVar supervision:
 
 ```bash
-python graintts/train_l1_ssim_gvar.py \
-  --run-name graintts-l1-ssim-gvar \
+python grainspeech/train_l1_ssim_gvar.py \
+  --run-name grainspeech-l1-ssim-gvar \
   --preprocess-config configs/LJSpeech/preprocess.yaml \
   --hifigan-checkpoint hifigan/LJ_V2/generator_v2 \
   --accelerator gpu --devices 1 --precision 16-mixed \
@@ -184,9 +185,9 @@ python graintts/train_l1_ssim_gvar.py \
 The available training objectives are:
 
 ```text
-graintts/train.py                  # L1
-graintts/train_l1_ssim.py          # L1 + SSIM
-graintts/train_l1_ssim_gvar.py     # L1 + SSIM + GVar (GrainTTS)
+grainspeech/train.py                  # L1
+grainspeech/train_l1_ssim.py          # L1 + SSIM
+grainspeech/train_l1_ssim_gvar.py     # L1 + SSIM + GVar (GrainSpeech)
 ```
 
 Training checkpoints and TensorBoard logs are written under

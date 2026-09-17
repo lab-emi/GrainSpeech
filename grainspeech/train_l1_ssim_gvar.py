@@ -1,4 +1,4 @@
-"""Train or resume the 11x5 SSIM + GVar GrainTTS model."""
+"""Train or resume the 11x5 SSIM + GVar GrainSpeech model."""
 
 import datetime
 import os
@@ -12,7 +12,7 @@ from lightning.pytorch.loggers import TensorBoardLogger
 
 from datamodule import LJSpeechDataModule
 from layers import networks as networks_module
-from model_l1_ssim_gvar import EfficientSpeech
+from model_l1_ssim_gvar import GrainSpeech
 from utils.tools import get_args
 
 
@@ -34,7 +34,7 @@ if __name__ == "__main__":
         batch_size=args.batch_size,
         num_workers=args.num_workers,
     )
-    model = EfficientSpeech(
+    model = GrainSpeech(
         preprocess_config=preprocess_config,
         lr=args.lr,
         weight_decay=args.weight_decay,

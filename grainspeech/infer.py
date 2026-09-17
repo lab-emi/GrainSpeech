@@ -1,4 +1,4 @@
-"""Synthesize speech with the released GrainTTS checkpoint."""
+"""Synthesize speech with the released GrainSpeech checkpoint."""
 
 import argparse
 from pathlib import Path
@@ -9,12 +9,12 @@ import yaml
 from g2p_en import G2p
 from scipy.io import wavfile
 
-from model_l1_ssim_gvar import EfficientSpeech
+from model_l1_ssim_gvar import GrainSpeech
 from text import text_to_sequence
 from text.symbols import symbols
 
 
-DEFAULT_CHECKPOINT = "checkpoints/graintts_l1_ssim_gvar.ckpt"
+DEFAULT_CHECKPOINT = "checkpoints/grainspeech_l1_ssim_gvar.ckpt"
 DEFAULT_CONFIG = "configs/LJSpeech/preprocess.yaml"
 DEFAULT_STATS = "configs/LJSpeech/stats.json"
 DEFAULT_VOCODER = "hifigan/LJ_V2/generator_v2"
@@ -37,7 +37,7 @@ def parse_args():
         help="Training-set pitch and energy statistics",
     )
     parser.add_argument("--hifigan-checkpoint", default=DEFAULT_VOCODER)
-    parser.add_argument("--output", default="outputs/graintts.wav")
+    parser.add_argument("--output", default="outputs/grainspeech.wav")
     parser.add_argument(
         "--device",
         choices=("auto", "cpu", "cuda"),
@@ -92,7 +92,7 @@ def main():
     output = Path(args.output)
 
     for path, label in (
-        (checkpoint, "GrainTTS checkpoint"),
+        (checkpoint, "GrainSpeech checkpoint"),
         (config_path, "preprocessing configuration"),
         (stats_path, "LJSpeech statistics"),
         (vocoder_checkpoint, "HiFi-GAN checkpoint"),
@@ -114,7 +114,7 @@ def main():
         "phoneme_mask": torch.zeros_like(phoneme, dtype=torch.bool),
     }
 
-    model = EfficientSpeech.load_from_checkpoint(
+    model = GrainSpeech.load_from_checkpoint(
         checkpoint,
         map_location=device,
         preprocess_config=preprocess_config,
