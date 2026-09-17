@@ -42,3 +42,7 @@ lightning_logs/
 # Small, reproducible README examples (not training data).
 !assets/examples/*.wav
 !assets/examples/*.npy
+
+# Paper website and its published demo recordings.
+!website/demo/audio/*.wav
+_site/

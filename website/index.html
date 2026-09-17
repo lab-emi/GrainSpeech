@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      GrainSpeech — Less Context, More Detail for Compact Speech Synthesis
+    </title>
+    <meta
+      name="description"
+      content="GrainSpeech from EMI Lab at TU Delft: compact speech synthesis with 264.8K acoustic parameters. Listen to examples, compare models, and explore the paper and code."
+    />
+    <meta name="theme-color" content="#101f31" />
+    <link rel="canonical" href="https://lab-emi.github.io/GrainSpeech/" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="GrainSpeech — Less Context. More Detail."
+    />
+    <meta
+      property="og:description"
+      content="Compact speech synthesis from EMI Lab, TU Delft. Listen to GrainSpeech and compare models directly on the paper website."
+    />
+    <meta property="og:url" content="https://lab-emi.github.io/GrainSpeech/" />
+    <meta
+      property="og:image"
+      content="https://lab-emi.github.io/GrainSpeech/assets/grainspeech-banner.png"
+    />
+    <meta
+      name="citation_title"
+      content="GrainSpeech: Less Context, More Detail for Compact Speech Synthesis"
+    />
+    <meta name="citation_author" content="Zitao Liang" />
+    <meta name="citation_author" content="Chang Gao" />
+    <meta name="citation_publication_date" content="2026/09/16" />
+    <meta name="citation_pdf_url" content="https://arxiv.org/pdf/2609.18856" />
+    <meta name="citation_doi" content="10.48550/arXiv.2609.18856" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="site.js" defer></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ScholarlyArticle",
+        "headline": "GrainSpeech: Less Context, More Detail for Compact Speech Synthesis",
+        "author": [
+          { "@type": "Person", "name": "Zitao Liang" },
+          { "@type": "Person", "name": "Chang Gao" }
+        ],
+        "datePublished": "2026-09-16",
+        "url": "https://arxiv.org/abs/2609.18856",
+        "sameAs": "https://doi.org/10.48550/arXiv.2609.18856",
+        "isAccessibleForFree": true
+      }
+    </script>
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <div class="institutions">
+          <a href="https://www.tudemi.com/" aria-label="EMI Lab at TU Delft"
+            ><img
+              src="assets/emi-logo.svg"
+              alt="EMI Lab"
+              width="146"
+              height="48"
+          /></a>
+          <span class="brand-rule" aria-hidden="true"></span>
+          <a
+            href="https://www.tudelft.nl/en/"
+            aria-label="Delft University of Technology"
+            ><img
+              class="tu-logo"
+              src="assets/tu-delft-logo.svg"
+              alt="TU Delft"
+              width="105"
+              height="41"
+          /></a>
+        </div>
+        <nav aria-label="Page sections">
+          <a href="#demo">Listen</a><a href="#method">Method</a
+          ><a href="#results">Results</a><a href="#cite">Cite</a>
+        </nav>
+      </div>
+    </header>
+    <main id="main">
+      <section class="hero wrap" aria-labelledby="paper-title">
+        <div class="hero-copy">
+          <p class="eyebrow">
+            <span class="square" aria-hidden="true"></span>EMI Lab · arXiv
+            preprint · 2026
+          </p>
+          <h1 id="paper-title">
+            Grain<span>Speech</span
+            ><span class="paper-subtitle"
+              >Less Context, More Detail<br />for Compact Speech Synthesis</span
+            >
+          </h1>
+          <p class="authors">
+            <a href="https://www.tudemi.com/zitao-liang/">Zitao Liang</a
+            ><span aria-hidden="true"> · </span
+            ><a href="https://gaochangw.github.io/">Chang Gao<sup>*</sup></a>
+          </p>
+          <p class="affiliation">
+            Efficient Machine Intelligence Lab · TU Delft<br /><span
+              >* Corresponding author</span
+            >
+          </p>
+          <div class="hero-actions">
+            <a
+              class="button button-primary"
+              href="https://arxiv.org/abs/2609.18856"
+              ><svg viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M5 2h7l4 4v12H5zM12 2v5h4M8 11h5M8 14h5" /></svg
+              >arXiv paper</a
+            >
+            <a class="button" href="https://github.com/lab-emi/GrainSpeech"
+              ><svg viewBox="0 0 20 20" aria-hidden="true">
+                <path d="m7 5-5 5 5 5m6-10 5 5-5 5m-2-12-2 14" /></svg
+              >GitHub code</a
+            >
+            <a class="listen-link" href="#demo"
+              >Compare voices <span aria-hidden="true">↓</span></a
+            >
+          </div>
+        </div>
+        <aside
+          class="first-listen"
+          aria-label="Listen to a short GrainSpeech example"
+        >
+          <div class="player-top">
+            <span class="eyebrow">Start with a listen</span
+            ><span class="clip-length">2.40 s</span>
+          </div>
+          <p class="example-quote">
+            “Small models can give <br />every word a voice.”
+          </p>
+          <div class="waveform" aria-hidden="true"><!-- WAVEFORM --></div>
+          <audio
+            id="featured-audio"
+            controls
+            preload="none"
+            aria-label="Play GrainSpeech: Small models can give every word a voice"
+            src="assets/examples/compact-speech.wav"
+          >
+            <a href="assets/examples/compact-speech.wav"
+              >Download the example audio</a
+            >
+          </audio>
+          <p class="player-caption">GrainSpeech · released checkpoint</p>
+        </aside>
+      </section>
+
+      <section id="demo" class="listen-section" aria-labelledby="listen-title">
+        <div class="wrap">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">01 / Audio demo</p>
+              <h2 id="listen-title">Hear the <em>difference.</em></h2>
+            </div>
+            <p>
+              Choose a sentence. Listen to GrainSpeech,<br
+                class="desktop-break"
+              />
+              then compare it with the original recording.
+            </p>
+          </div>
+          <div class="listening-desk">
+            <div
+              class="sample-switcher"
+              role="group"
+              aria-label="Choose a demo sentence"
+            >
+              <!-- SAMPLE_BUTTONS -->
+            </div>
+            <!-- DEMO_SAMPLES -->
+          </div>
+          <p class="demo-note">
+            Five shared LJSpeech utterances. Every synthesized sample uses the
+            same HiFi-GAN v2 vocoder; original recordings bypass it.
+            <a href="demo/manifest.json"
+              >Audio details &amp; provenance
+              <span aria-hidden="true">↗</span></a
+            >
+          </p>
+          <noscript
+            ><style>
+              .sample-panel[hidden] {
+                display: block !important;
+              }
+              .sample-panel {
+                border-bottom: 1px solid #d9e2e8;
+              }
+              .sample-switcher {
+                display: none;
+              }
+            </style>
+            <p>
+              All five sentences are shown below one another. Audio controls
+              work without JavaScript.
+            </p></noscript
+          >
+        </div>
+      </section>
+
+      <section id="method" class="section wrap" aria-labelledby="method-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">02 / The idea</p>
+            <h2 id="method-title">
+              Less context.<br /><em>More acoustic detail.</em>
+            </h2>
+          </div>
+          <p class="method-summary">
+            GrainSpeech explores how encoder context and Mel supervision affect
+            compact speech synthesis. Its acoustic model has 264.8K parameters.
+          </p>
+        </div>
+        <div class="ideas">
+          <article>
+            <span class="idea-number">01</span>
+            <div>
+              <h3>Focus the encoder</h3>
+              <p>
+                A fixed-receptive-field convolutional encoder uses local phoneme
+                context to predict pitch, energy and duration.
+              </p>
+            </div>
+          </article>
+          <article>
+            <span class="idea-number">02</span>
+            <div>
+              <h3>Preserve fine structure</h3>
+              <p>
+                L1, SSIM and a Mel-specific gradient-variance objective
+                supervise local detail along time and frequency.
+              </p>
+            </div>
+          </article>
+        </div>
+        <figure class="architecture">
+          <img
+            src="assets/grainspeech_architecture.png"
+            width="680"
+            height="160"
+            alt="GrainSpeech architecture: phonemes enter a fixed-receptive-field encoder, pitch, energy and duration predictors condition a decoder, and Mel spectrograms are supervised with L1, SSIM and Mel-GVar losses."
+            loading="lazy"
+          />
+          <figcaption>
+            From phonemes to a Mel spectrogram. HiFi-GAN converts the predicted
+            Mel into the audio heard above.
+            <a href="https://arxiv.org/html/2609.18856v1#S2"
+              >Explore the method in the paper ↗</a
+            >
+          </figcaption>
+        </figure>
+      </section>
+
+      <section
+        id="results"
+        class="results-section section"
+        aria-labelledby="results-title"
+      >
+        <div class="wrap">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">03 / Results</p>
+              <h2 id="results-title">Small enough for the edge.</h2>
+            </div>
+            <a class="text-link" href="https://arxiv.org/html/2609.18856v1#S3"
+              >Full evaluation ↗</a
+            >
+          </div>
+          <div class="metrics">
+            <div>
+              <strong>264.8<span>K</span></strong>
+              <p>Acoustic model parameters</p>
+            </div>
+            <div>
+              <strong>4.086</strong>
+              <p>UTMOS on 128 LJSpeech utterances</p>
+            </div>
+            <div>
+              <strong>17.9<span>×</span></strong>
+              <p>Real-time Mel generation on MCU</p>
+            </div>
+          </div>
+          <p class="metric-note">
+            MCU result: A16W8 on STM32H747XI, 483.19 KiB peak SRAM. This
+            measures acoustic-model inference; vocoding is excluded.
+          </p>
+          <div
+            class="results-table-wrap"
+            tabindex="0"
+            role="region"
+            aria-label="Selected results table, scroll horizontally on small screens"
+          >
+            <table class="results-table">
+              <caption>
+                Selected results from Table 1 of the preprint
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Acoustic model</th>
+                  <th scope="col">Parameters</th>
+                  <th scope="col">UTMOS ↑</th>
+                  <th scope="col">WER (%) ↓</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="ours">
+                  <th scope="row">GrainSpeech <span>This work</span></th>
+                  <td>0.265M</td>
+                  <td>4.086</td>
+                  <td>3.27</td>
+                </tr>
+                <tr>
+                  <th scope="row">EfficientSpeech-Tiny</th>
+                  <td>0.266M</td>
+                  <td>3.591</td>
+                  <td>3.08</td>
+                </tr>
+                <tr>
+                  <th scope="row">MatchaTTS</th>
+                  <td>18.204M</td>
+                  <td>4.264</td>
+                  <td>1.98</td>
+                </tr>
+                <tr>
+                  <th scope="row">MixerTTS</th>
+                  <td>20.060M</td>
+                  <td>4.087</td>
+                  <td>1.80</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="result-note">
+            Automatic metrics on LJSpeech. External models use their native
+            training settings. See the paper for confidence intervals, spectral
+            distortion and evaluation limitations.
+          </p>
+        </div>
+      </section>
+
+      <section
+        id="cite"
+        class="section wrap citation-section"
+        aria-labelledby="cite-title"
+      >
+        <div class="citation-intro">
+          <p class="eyebrow">04 / Open research</p>
+          <h2 id="cite-title">Read it.<br /><em>Run it. Build on it.</em></h2>
+          <p>
+            The acoustic model, pretrained weights, inference and training code,
+            and this paper website live in one repository.
+          </p>
+          <a
+            class="button button-primary"
+            href="https://github.com/lab-emi/GrainSpeech#grainspeech-quick-start"
+            >Get started on GitHub <span aria-hidden="true">↗</span></a
+          >
+        </div>
+        <div class="citation-box">
+          <div class="citation-heading">
+            <h3>Cite GrainSpeech</h3>
+            <button id="copy-citation" type="button" hidden>Copy BibTeX</button>
+          </div>
+          <pre><code id="bibtex">@article{liang2026grainspeech,
+  title = {GrainSpeech: Less Context, More Detail
+           for Compact Speech Synthesis},
+  author = {Liang, Zitao and Gao, Chang},
+  journal = {arXiv preprint arXiv:2609.18856},
+  year = {2026},
+  doi = {10.48550/arXiv.2609.18856},
+  url = {https://arxiv.org/abs/2609.18856}
+}</code></pre>
+          <p id="copy-status" class="sr-only" role="status"></p>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div class="wrap footer-inner">
+        <p>
+          <strong>GrainSpeech</strong
+          ><span>EMI Lab · Delft University of Technology</span>
+        </p>
+        <div>
+          <a href="https://www.tudemi.com/">Meet the lab ↗</a
+          ><a href="https://arxiv.org/abs/2609.18856">Paper ↗</a
+          ><a href="https://github.com/lab-emi/GrainSpeech">Code ↗</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -17,10 +17,10 @@ synthesis. It introduces two changes:
 2. An **anti-oversmoothing Mel loss** that combines L1, SSIM, and local
    gradient-variance (GVar) supervision.
 
+[**Paper website & audio demos**](https://lab-emi.github.io/GrainSpeech/) ·
 [Paper](https://arxiv.org/abs/2609.18856) ·
 [Text → Spectrogram Examples](#text--spectrogram-examples) ·
 [GrainSpeech Audio Demo](#grainspeech-audio-demo) ·
-[GrainSpeech Online Playground](#grainspeech-online-playground) ·
 [GrainSpeech Quick Start](#grainspeech-quick-start) ·
 [GrainSpeech Training](#grainspeech-training)
 
@@ -64,13 +64,14 @@ the plots above are the original model outputs.
 
 ## GrainSpeech Audio Demo
 
-Listen to GrainSpeech samples generated from the LJSpeech dataset:
-[**GrainSpeech Audio Demo**](https://lab-emi.github.io/GrainTTS-Audio-Demo/).
+Open the [**GrainSpeech paper website**](https://lab-emi.github.io/GrainSpeech/#demo)
+to play samples directly on the page. Choose from five LJSpeech sentences and
+compare 12 acoustic-model variants with the original recordings. All 65
+comparison WAV files and their provenance now live in this repository, together
+with the model, code and paper website.
 
-## GrainSpeech Online Playground
-
-**GrainSpeech Online Playground — coming soon.** The playground
-will provide real-time text-to-speech synthesis directly from a web page.
+The website is built from [`website/`](website/README.md) and deployed to GitHub
+Pages automatically. See its README for local preview and editing instructions.
 
 ## GrainSpeech Quick Start
 

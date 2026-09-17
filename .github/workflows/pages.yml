@@ -1,0 +1,58 @@
+name: Deploy paper website
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "website/**"
+      - "assets/**"
+      - "scripts/build_paper_site.py"
+      - "scripts/check_paper_site.py"
+      - ".github/workflows/pages.yml"
+  pull_request:
+    paths:
+      - "website/**"
+      - "assets/**"
+      - "scripts/build_paper_site.py"
+      - "scripts/check_paper_site.py"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build static paper site
+        run: python3 scripts/build_paper_site.py
+      - name: Check recordings, links and JavaScript
+        run: |
+          python3 scripts/check_paper_site.py
+          node --check website/site.js
+      - uses: actions/upload-pages-artifact@v4
+        if: github.event_name != 'pull_request'
+        with:
+          path: _site
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
