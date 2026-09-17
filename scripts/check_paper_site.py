@@ -72,7 +72,7 @@ def main():
 
     manifest = json.loads((SITE / "demo/manifest.json").read_text())
     assert len(manifest["models"]) == 13 and len(manifest["samples"]) == 5
-    expected_players = ["assets/examples/compact-speech.wav"]
+    expected_players = ["demo/audio/audio_es117_l1_ssim_gvar_04_LJ037-0157.wav"]
     sample_ids = {sample["sample_id"] for sample in manifest["samples"]}
     for model in manifest["models"]:
         assert {clip["sample_id"] for clip in model["files"]} == sample_ids
@@ -86,7 +86,7 @@ def main():
                 assert recording.getsampwidth() == clip["sample_width_bytes"] == 2
                 assert recording.getnframes() == clip["frames"]
             expected_players.append(relative)
-    assert Counter(page.players) == Counter(expected_players), "Every recording must be playable exactly once"
+    assert Counter(page.players) == Counter(expected_players), "Expected every comparison recording plus the featured sample"
     assert Counter(page.models) == Counter({m["model_id"]: 5 for m in manifest["models"]})
     print("Verified 66 audio players, all 65 original recording hashes and WAV headers, five sample panels, local links, fonts and logos.")
 

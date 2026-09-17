@@ -97,7 +97,7 @@ def waveform_svg(path):
 def main():
     manifest = json.loads((SOURCE / "demo/manifest.json").read_text())
     buttons, panels = demo_html(manifest)
-    featured = ROOT / "assets/examples/compact-speech.wav"
+    featured = SOURCE / "demo/audio/audio_es117_l1_ssim_gvar_04_LJ037-0157.wav"
     html = (SOURCE / "index.html").read_text()
     for marker, content in {
         "<!-- SAMPLE_BUTTONS -->": buttons,
@@ -110,7 +110,7 @@ def main():
     if OUTPUT.exists():
         shutil.rmtree(OUTPUT)
     shutil.copytree(SOURCE, OUTPUT, ignore=shutil.ignore_patterns("README.md"))
-    for relative in ("grainspeech-banner.png", "grainspeech_architecture.png", "examples/compact-speech.wav"):
+    for relative in ("grainspeech-banner.png", "grainspeech_architecture.png"):
         destination = OUTPUT / "assets" / relative
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(ROOT / "assets" / relative, destination)

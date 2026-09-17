@@ -25,9 +25,9 @@ Relative asset paths support both local preview and the GitHub Pages project URL
 
 - All 65 original comparison recordings were imported byte-for-byte from
   `lab-emi/GrainTTS-Audio-Demo`. See [audio provenance](demo/PROVENANCE.md).
-- The short opening clip is the existing model-generated
-  `assets/examples/compact-speech.wav`; its checkpoint and generation settings
-  are recorded in `assets/examples/manifest.json` at the repository root.
+- The 1.28-second opening clip is the GrainSpeech (L1 + SSIM + GVar) rendition of
+  LJSpeech sample `LJ037-0157`: “Taken from Oswald.” It reuses the unchanged
+  Sample 04 comparison recording, with its provenance in `demo/manifest.json`.
 - Players load audio on demand. Choosing a sentence pauses hidden players;
   starting a recording pauses any other recording. The complete comparison
   works without JavaScript, with all five sentences shown.
