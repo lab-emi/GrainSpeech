@@ -1,4 +1,9 @@
-![GrainSpeech: text in, Mel spectrogram out, with GrainSpeech and EMI Lab logos](assets/grainspeech-banner.png)
+> [!TIP]
+> **[▶ Listen to GrainSpeech — open the audio demo](https://lab-emi.github.io/GrainSpeech/#demo)**
+>
+> Play speech samples directly in your browser and compare models. **No installation required.**
+
+[![GrainSpeech: click the banner to listen to the audio demo](assets/grainspeech-banner.png)](https://lab-emi.github.io/GrainSpeech/#demo)
 
 # GrainSpeech
 
@@ -17,12 +22,25 @@ synthesis. It introduces two changes:
 2. An **anti-oversmoothing Mel loss** that combines L1, SSIM, and local
    gradient-variance (GVar) supervision.
 
-[**Paper website & audio demos**](https://lab-emi.github.io/GrainSpeech/) ·
+[**▶ Listen to Audio Demos**](https://lab-emi.github.io/GrainSpeech/#demo) ·
 [Paper](https://arxiv.org/abs/2609.18856) ·
 [Text → Spectrogram Examples](#text--spectrogram-examples) ·
-[GrainSpeech Audio Demo](#grainspeech-audio-demo) ·
 [GrainSpeech Quick Start](#grainspeech-quick-start) ·
 [GrainSpeech Training](#grainspeech-training)
+
+## GrainSpeech Audio Demo
+
+### [▶ Click here to listen and compare voices](https://lab-emi.github.io/GrainSpeech/#demo)
+
+Choose a sentence and press play on the
+[**GrainSpeech paper website**](https://lab-emi.github.io/GrainSpeech/).
+Listen to GrainSpeech alongside the original recording, then expand **Compare
+all models** to hear the other systems. Five LJSpeech sentences and 12
+acoustic-model variants are available, with all playback on the same page.
+
+All 65 comparison WAV files and their provenance live in this repository,
+together with the model, code and paper website. To edit or preview the website,
+see [`website/README.md`](website/README.md).
 
 ## Text → Spectrogram Examples
 
@@ -61,17 +79,6 @@ the plots above are the original model outputs.
 ## Architecture
 
 ![GrainSpeech architecture](assets/grainspeech_architecture.png)
-
-## GrainSpeech Audio Demo
-
-Open the [**GrainSpeech paper website**](https://lab-emi.github.io/GrainSpeech/#demo)
-to play samples directly on the page. Choose from five LJSpeech sentences and
-compare 12 acoustic-model variants with the original recordings. All 65
-comparison WAV files and their provenance now live in this repository, together
-with the model, code and paper website.
-
-The website is built from [`website/`](website/README.md) and deployed to GitHub
-Pages automatically. See its README for local preview and editing instructions.
 
 ## GrainSpeech Quick Start
 
