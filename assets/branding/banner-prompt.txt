@@ -1,0 +1,19 @@
+Use case: scientific-educational / ads-marketing.
+Create a beautifully finished wide 2400 x 1400 research concept banner/poster for the GitHub README of GrainSpeech, from the Efficient Machine Intelligence (EMI) lab at TU Delft.
+
+Input image 1 is the ACTUAL EMI lab logo: preserve its exact navy brain-and-circuit symbol and blue EMI letterforms without redesign.
+Input image 2 is the REAL model-generated Mel spectrogram for "Small models can give every word a voice." (2.403 seconds).
+Input image 3 is the REAL model-generated Mel spectrogram for "The morning light falls softly on the quiet garden." (2.984 seconds).
+Use the two plot images as supporting scientific inserts, preserving their spectrogram textures and shapes; do not invent fake heat maps.
+
+Style reference: tudemi.com is elegant, spare scientific editorial design: bright white paper, deep navy #101f31, Delft blue #007dad and restrained cyan #37b9e8, very pale blue-gray panels, generous margins, fine hairline rules, geometric sans-serif headings paired with blue italic serif subheads. Brain/circuit line art, rounded circuit endpoints. Professional academic poster, refined, flat artwork, no stock illustration, no mockup, no gradients behind text, no decorative photorealism.
+
+Upper band: prominent GrainSpeech wordmark in navy and blue at upper left, with a NEW GrainSpeech emblem. Design the emblem as a single grain/seed shape that also reads as a speech bubble, with 3 waveform strokes inside and 3 short circuit traces with round endpoints outside. Match the EMI logo's stroke weight and circuit visual language while making a distinct identifiable mark. At upper right place the supplied EMI logo, below it small "Efficient Machine Intelligence" and "TU Delft".
+
+Main headline, exact: "Less context. More detail." in large editorial typography, with "More detail." blue italic serif.
+Supporting line: "Compact speech synthesis".
+Two small research tags: "264.8K acoustic parameters" and "L1 + SSIM + GVar".
+
+Lower band: a clear left-to-right conceptual pipeline. Left: section heading "TEXT IN" with two neatly typeset input quotes, exact sentences from image 2 and image 3, each numbered 01 and 02. Center: tasteful GrainSpeech grain/circuit emblem with a thin blue arrow toward output. Below it small label "GrainSpeech". Right: section heading "MEL SPECTROGRAM OUT" with the two corresponding provided spectrogram inserts stacked and labeled 01 and 02. The plots are the main visual evidence; large enough to read as real speech patterns. Preserve purple/orange magma coloring in the scientific inserts even though the surrounding art is blue and white. Do not redraw their axes or add invented numbers.
+Bottom rule and small text "EMI Lab · TU Delft" at left, "arXiv:2609.18856" at right.
+No extra claims, no performance charts, no awards, no external logos, no watermarks, no fake URLs. Keep all copy crisp and correctly spelled. The final image is the entire banner, not shown on a device or within a frame.

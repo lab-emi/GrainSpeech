@@ -1,24 +1,66 @@
+![GrainSpeech: text in, Mel spectrogram out, with GrainSpeech and EMI Lab logos](assets/grainspeech-banner.png)
+
 # GrainSpeech
+
+**Less Context, More Detail for Compact Speech Synthesis**
 
 **Authors:** Zitao Liang, Chang Gao\*  
 \* Corresponding author.
 
 This is the official repository for the paper
 [**“GrainSpeech: Less Context, More Detail for Compact Speech Synthesis”**](https://arxiv.org/abs/2609.18856).
-GrainSpeech introduces two changes for compact text-to-speech synthesis:
+GrainSpeech is a **264.8K-parameter acoustic model** for compact text-to-speech
+synthesis. It introduces two changes:
 
 1. A **fixed-receptive-field convolutional encoder** that uses focused phoneme
    context for acoustic prediction.
 2. An **anti-oversmoothing Mel loss** that combines L1, SSIM, and local
    gradient-variance (GVar) supervision.
 
-![GrainSpeech architecture](assets/grainspeech_architecture.png)
-
 [Paper](https://arxiv.org/abs/2609.18856) ·
+[Text → Spectrogram Examples](#text--spectrogram-examples) ·
 [GrainSpeech Audio Demo](#grainspeech-audio-demo) ·
 [GrainSpeech Online Playground](#grainspeech-online-playground) ·
 [GrainSpeech Quick Start](#grainspeech-quick-start) ·
 [GrainSpeech Training](#grainspeech-training)
+
+## Text → Spectrogram Examples
+
+These examples were synthesized on CPU with the released
+`grainspeech_l1_ssim_gvar.ckpt` checkpoint. Each plot shows the **predicted
+80-bin log-Mel spectrogram directly from GrainSpeech**, before HiFi-GAN converts
+it to audio. Both plots use the same color scale; time is in seconds.
+
+**“Small models can give every word a voice.”** — 2.40 seconds
+
+![Predicted Mel spectrogram for Small models can give every word a voice](assets/examples/compact-speech.png)
+
+[Listen / download WAV](assets/examples/compact-speech.wav) ·
+[Raw Mel array](assets/examples/compact-speech.npy)
+
+**“The morning light falls softly on the quiet garden.”** — 2.98 seconds
+
+![Predicted Mel spectrogram for The morning light falls softly on the quiet garden](assets/examples/morning-light.png)
+
+[Listen / download WAV](assets/examples/morning-light.wav) ·
+[Raw Mel array](assets/examples/morning-light.npy)
+
+After the [Quick Start](#grainspeech-quick-start) installation, reproduce both
+examples with:
+
+```bash
+python scripts/generate_readme_examples.py --device cpu
+```
+
+This writes the plots, WAV files, raw NumPy arrays, and a
+[generation manifest](assets/examples/manifest.json) with the input phonemes,
+checkpoint hash, settings, and package versions to `assets/examples/`.
+The [banner artwork](assets/branding/README.md) illustrates this workflow;
+the plots above are the original model outputs.
+
+## Architecture
+
+![GrainSpeech architecture](assets/grainspeech_architecture.png)
 
 ## GrainSpeech Audio Demo
 
@@ -27,7 +69,7 @@ Listen to GrainSpeech samples generated from the LJSpeech dataset:
 
 ## GrainSpeech Online Playground
 
-[**Launch the GrainSpeech Online Playground**](TODO) — coming soon. The playground
+**GrainSpeech Online Playground — coming soon.** The playground
 will provide real-time text-to-speech synthesis directly from a web page.
 
 ## GrainSpeech Quick Start
@@ -44,7 +86,7 @@ python3.11 -m venv .venv
 . .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-python -m nltk.downloader averaged_perceptron_tagger cmudict
+python -m nltk.downloader averaged_perceptron_tagger averaged_perceptron_tagger_eng cmudict
 ```
 
 The last command installs the language resources used by `g2p-en` to convert
@@ -201,3 +243,16 @@ The released checkpoint in `checkpoints/` is inference-only and cannot resume
 training. Add `--compile` to enable `torch.compile` for training.
 
 No LJSpeech audio, TextGrid, or generated dataset feature is tracked by Git.
+
+## Citation
+
+```bibtex
+@article{liang2026grainspeech,
+  title   = {GrainSpeech: Less Context, More Detail for Compact Speech Synthesis},
+  author  = {Liang, Zitao and Gao, Chang},
+  journal = {arXiv preprint arXiv:2609.18856},
+  year    = {2026},
+  doi     = {10.48550/arXiv.2609.18856},
+  url     = {https://arxiv.org/abs/2609.18856}
+}
+```

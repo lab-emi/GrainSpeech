@@ -38,3 +38,7 @@ lightning_logs/
 *.wav
 *.flac
 *.npy
+
+# Small, reproducible README examples (not training data).
+!assets/examples/*.wav
+!assets/examples/*.npy

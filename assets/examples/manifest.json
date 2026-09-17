@@ -1,0 +1,88 @@
+{
+  "checkpoint": "checkpoints/grainspeech_l1_ssim_gvar.ckpt",
+  "checkpoint_sha256": "9361086fc8539d1ef6cdfbfd759608af42c258be3977c306515681b984ad3fb6",
+  "vocoder_sha256": "3fac378c5918fb2c102733f21eeaa8e9a4ca6cda24dbfddc55bbb947c78d562f",
+  "config_sha256": "fef9d0aee3012d175915367608890b679b84443beeec60b580b6d2b0212a7e72",
+  "stats_sha256": "a438752b9edb00526ff1eb05224ffd5c63ce3ead3c8e2efdb96e5e83486bcb6d",
+  "device": "cpu",
+  "seed": 0,
+  "torch_threads": 1,
+  "python": "3.11.16",
+  "versions": {
+    "torch": "2.12.0",
+    "lightning": "2.6.5",
+    "numpy": "1.26.4",
+    "scipy": "1.14.1",
+    "matplotlib": "3.11.1",
+    "g2p-en": "2.1.0",
+    "nltk": "3.10.3"
+  },
+  "sampling_rate": 22050,
+  "hop_length": 256,
+  "mel_source": "Direct GrainSpeech acoustic-model prediction before HiFi-GAN",
+  "mel_layout": "time_frames, mel_bins; natural-log amplitude",
+  "plot": {
+    "cmap": "magma",
+    "vmin": -11.5,
+    "vmax": 2.0,
+    "interpolation": "nearest"
+  },
+  "examples": [
+    {
+      "id": "compact-speech",
+      "text": "Small models can give every word a voice.",
+      "arpabet": "{S M AO1 L M AA1 D AH0 L Z K AE1 N G IH1 V EH1 V ER0 IY0 W ER1 D AH0 V OY1 S}",
+      "mel_shape": [
+        207,
+        80
+      ],
+      "duration_seconds": 2.403265306122449,
+      "mel_range": [
+        -10.194218635559082,
+        1.752935767173767
+      ],
+      "files": {
+        "npy": {
+          "path": "compact-speech.npy",
+          "sha256": "d37631386614159db79c6bfec2ca636b5fa1996e87c3ec8d77568b807159c26e"
+        },
+        "wav": {
+          "path": "compact-speech.wav",
+          "sha256": "8f644c958092ac2404112f2b3299632acae14c8b03366776b5b5b50cb10a8b9c"
+        },
+        "png": {
+          "path": "compact-speech.png",
+          "sha256": "cfc95939ad43906713a9cb41f8417a94481cf75b09c66d8e3ebf8ca71819e1a4"
+        }
+      }
+    },
+    {
+      "id": "morning-light",
+      "text": "The morning light falls softly on the quiet garden.",
+      "arpabet": "{DH AH0 M AO1 R N IH0 NG L AY1 T F AO1 L Z S AO1 F T L IY0 AA1 N DH AH0 K W AY1 AH0 T G AA1 R D AH0 N}",
+      "mel_shape": [
+        257,
+        80
+      ],
+      "duration_seconds": 2.9837641723356008,
+      "mel_range": [
+        -10.395605087280273,
+        1.4507038593292236
+      ],
+      "files": {
+        "npy": {
+          "path": "morning-light.npy",
+          "sha256": "ba8da97f644d0f8bc483685760c595d85afc0a430682819aaf74d0eccbf4938c"
+        },
+        "wav": {
+          "path": "morning-light.wav",
+          "sha256": "1b3c5644ef99da78741015490993fed85dd99a1126505e34c12c459eb173541d"
+        },
+        "png": {
+          "path": "morning-light.png",
+          "sha256": "cac05e6a3869ef5c19bde6145cdf561e3174e44ba4eb7f6305644405b213bec7"
+        }
+      }
+    }
+  ]
+}
