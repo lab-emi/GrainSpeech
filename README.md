@@ -243,7 +243,9 @@ Training checkpoints and TensorBoard logs are written under
 The released checkpoint in `checkpoints/` is inference-only and cannot resume
 training. Add `--compile` to enable `torch.compile` for training.
 
-No LJSpeech audio, TextGrid, or generated dataset feature is tracked by Git.
+The full LJSpeech dataset, TextGrids and generated training features stay outside
+Git. Only the small published listening examples under `website/demo/audio/`
+are included in the repository.
 
 ## Citation
 
