@@ -28,6 +28,8 @@ synthesis. It introduces two changes:
 [GrainSpeech Quick Start](#grainspeech-quick-start) ·
 [GrainSpeech Training](#grainspeech-training)
 
+![GrainSpeech quality and model-size comparison](assets/grainspeech_sota.png)
+
 ## GrainSpeech Audio Demo
 
 ### [▶ Click here to listen and compare voices](https://lab-emi.github.io/GrainSpeech/#demo)
